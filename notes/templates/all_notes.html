@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+
+        <script>
+          const sheep = new eSheep();
+          sheep.Start();
+        </script>
+
+        {% csrf_token%}
+        <button class="button" id="createsticky">Stick it!</button>
+        <div id="stickies-container">
+                {% for note in notes %}
+                        {% if not only_user or user == note.author %}
+                                <div id={{ note.id }} class="drag sticky"
+                                     style="left:{{ note.left }}; top:{{ note.top }}">
+
+                                        <h3><input type="text" name="stickytitle"
+                                                   id={{ note.get_title_id }} value={{ note.title }}></h3>
+
+                                        <p><textarea name="stickytext" id={{ note.get_content_id }}
+                                                     cols="24" rows="10">{{ note.content }}</textarea></p>
+
+                                        {% if note.author == user %}
+                                                <span class="deletesticky">&times;</span>
+                                        {% endif %}
+
+                                        <span class="savesticky">&#10003;</span>
+
+                                        {% if note.get_last_edit %}
+                                        <a href="{% url 'notes:details_note' note.id %}" style="text-decoration:none;">
+                                                <div id={{ note.get_footer_id }}, class="update_footer">
+                                                        upd: {{ note.get_last_edit.when_published }} by
+                                                        {% if note.get_last_edit.author == user %} me
+                                                        {% else %} {{ note.get_last_edit.author }}
+                                                        {% endif %}
+                                                </div>
+                                        </a>
+                                        {% endif %}
+                                </div>
+                        {% endif %}
+                {% endfor %}
+        </div>
+
+{% endblock %}

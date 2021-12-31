@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+    <center>
+        <h2>Profile</h2>
+        <p>Username : {{ user.username }}</p>
+        <p>Date joined : {{ user.date_joined }}</p>
+    </center>
+{% endblock %}

@@ -1,0 +1,12 @@
+{%  block content %}
+<div class="navbar">
+  <a href="{% url 'notes:notes' %}">Записки</a>
+  {% if user.is_authenticated %}
+  <a href="{% url 'notes:user_notes' %}">Мої записки</a>
+  <a href="{% url 'auth:log_out' %}" style="float:right">Вийти</a>
+  <a href="{% url 'auth:profile' user.id %}" style="float:right">{{ user.username }}</a>
+  {% else %}
+  <a href="{% url 'auth:log_in' %}" style="float:right">Увійти</a>
+  {% endif %}
+</div>
+{% endblock %}

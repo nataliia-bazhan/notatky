@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{%  block content %}
+
+<center><h3>Chronicle of note №{{ note.id }}</h3>
+        <p>(created by
+             {% if note.author == user %} me
+             {% else %} {{ note.author }}
+             {% endif %} {{ note.when_published }})</p></center>
+
+<div class="container-flexy">
+{% for edit in edits|dictsortreversed:"creation_date" %}
+    <div class="sticky-flexy">
+        <h3>{{ edit.title }}</h3>
+        <p>{{ edit.content }}</p>
+        <div class="update_footer"> upd: {{ edit.when_published }} by
+                                         {% if edit.author == user %} me
+                                         {% else %} {{ edit.author }}
+                                         {% endif %}
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}
