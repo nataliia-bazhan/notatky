@@ -2,14 +2,20 @@
 
 {% block content %}
   <center>
-    <div class="form">
+    <div class="form white_box">
       <form method="POST" action="">
         {% csrf_token %}
+
         <h2>Login</h2>
         <p>Username:<br>
           <input type="text" name="username"></p>
         <p>Password:<br>
           <input type="password" name="password"></p>
+
+        {% if error %}
+          <p style="color: red">{{ error }}</p>
+        {% endif %}
+
         <button type="submit"> Login </button>
         <p class="message">Don't have an account? <a href="{% url 'auth:sign_up' %}">Sign Up</a></p>
       </form>

@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
   );
 
   const deleteSticky = e => {
+    if (confirm("Are you sure you want to delete this note?")){
     const sticker = e.target.parentNode;
     const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     $.ajax({
@@ -28,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     sticker.remove();
+    };
   };
 
   const saveSticky = e => {
@@ -54,11 +56,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
             },
             success: function (response) {
-                //document.getElementById(`footer_${sticker.id}`).innerHTML = 'Hello World';
-                //alert(response['message'])
+                if (!response['saved']) {
+                    $(`#save_alert_${sticker.id}`).css('color', 'red');
+                    $(`#save_alert_${sticker.id}`).text('note wasn\'t changed!');
+                    $(`#save_alert_${sticker.id}`).fadeIn('fast');
+                    window.setTimeout(function(){
+                                     $(`#save_alert_${sticker.id}`).fadeOut('fast');}, 3000);
+                } else {
+                    $(`#save_alert_${sticker.id}`).css('color', 'green');
+                    $(`#save_alert_${sticker.id}`).text('note successfully changed!');
+                    $(`#save_alert_${sticker.id}`).fadeIn('fast');
+                    $(`#footer_${sticker.id}`).fadeOut('fast');
+                    //alert($(`#footer_${sticker.id} span`).innerHTML)
+                    window.setTimeout(function(){
+                                     $(`#save_alert_${sticker.id}`).fadeOut('fast');}, 3000);
+                }
             },
             error: function (response) {
-                //alert(response["responseJSON"]["error"]);
+                alert(response["error"]);
             }
         });
   };
@@ -88,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                       async: false
                                       }).responseText);
     newSticky.setAttribute("id", response.id);
-    const html = '<h3><input type="text" name="stickytitle" id=' + `title_${response.id}` + '></h3>\n' +
+    const html = '<div id=' + `save_alert_${response.id}` + ' class="save_alert">note wasn\'t changed</div>' +
+                 '<h3><input type="text" name="stickytitle" id=' + `title_${response.id}` + '></h3>\n' +
                  '<p><textarea name="stickytext" id=' + `content_${response.id}` + ' cols="24" rows="10"></textarea></p>\n' +
                  '<span class="deletesticky">&times;</span>\n' +
                  '<span class="savesticky">&#10003;</span>';

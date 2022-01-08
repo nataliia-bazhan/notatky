@@ -1,23 +1,49 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'note.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://adrianotiger.github.io/web-esheep/dist/esheep.min.js"></script>
+    <script src="{% static 'note.js' %}"></script>
+{% endblock %}
+
 
 {%  block content %}
 
-<center><h3>Chronicle of note №{{ note.id }}</h3>
-        <p>(created by
-             {% if note.author == user %} me
-             {% else %} {{ note.author }}
-             {% endif %} {{ note.when_published }})</p></center>
+<center>
+    <h3>Chronicle of note №{{ note.id }}</h3>
+    {% if note.author == user %}
+        <p>created  {{ note.when_published }} by you</p>
+    {% else %}
+        <p>created  {{ note.when_published }} by {{ note.author }}</p>
+    {% endif %}
+</center>
+
+<div class="users_edits">
+    {% for stat in note.html_users_edits %}
+        {{ stat }}<br>
+    {% endfor %}
+</div>
 
 <div class="container-flexy">
 {% for edit in edits|dictsortreversed:"creation_date" %}
-    <div class="sticky-flexy">
+    <div class="sticky-flexy" style="{{ edit.get_position }}">
+
         <h3>{{ edit.title }}</h3>
+
         <p>{{ edit.content }}</p>
-        <div class="update_footer"> upd: {{ edit.when_published }} by
-                                         {% if edit.author == user %} me
-                                         {% else %} {{ edit.author }}
-                                         {% endif %}
+
+        <div class="sticky_update_footer">
+                {% if edit.author == user %}
+                    upd:  {{ edit.when_published }} by you
+                {% else %}
+                    upd:  {{ edit.when_published }} by {{ edit.author }}
+                {% endif %}
         </div>
+
     </div>
 {% endfor %}
 </div>

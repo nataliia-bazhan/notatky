@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+import random
 
 
 class Note(models.Model):
@@ -54,12 +55,33 @@ class Note(models.Model):
     def get_last_edit(self):
         edits = self.get_edits()
 
+        #if edits:
+        #    return edits.order_by('-creation_date')[0]
+
+        #edits = self.get_edits()
+
         if edits:
             last_edit = edits[0]
             for edit in edits:
                 if edit.creation_date > last_edit.creation_date:
                     last_edit = edit
             return last_edit
+
+
+    def get_save_alert_id(self):
+        return f'save_alert_{self.id}'
+
+
+    def html_users_edits(self):
+        d = {}
+        edits = self.get_edits()
+        if edits:
+            for edit in edits:
+                if edit.author not in d:
+                    d[edit.author] = 1
+                else:
+                    d[edit.author] += 1
+        return [f'{author} : {d[author]} upd' for author in d]
 
 
 class Edit(models.Model):
@@ -86,3 +108,24 @@ class Edit(models.Model):
                 return f"{int(seconds / 60)} minutes ago"
         else:
             return f"{days} days ago"
+
+    def get_position(self):
+        edits = self.note.get_edits().order_by('-creation_date')
+
+        if edits:
+            i = 0
+            for edit in edits:
+                if edit.id == self.id:
+
+                    row = i // 4
+                    col = i % 4
+
+                    xran = 5*random.random()
+                    yran = 1 * random.random()
+
+                    return f'left:{3 + col*23 + xran}%; ' \
+                           f'top:{5 + row*2 + i*4 + yran}rem;'
+                i += 1
+
+
+

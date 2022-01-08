@@ -10,17 +10,18 @@
     <!-- CSS -->
     <link rel="stylesheet" href="{% static 'navbar.css' %}">
     <link rel="stylesheet" href="{% static 'base.css' %}">
-    <link rel="stylesheet" href="{% static 'note.css' %}">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-    <script src="https://adrianotiger.github.io/web-esheep/dist/esheep.min.js"></script>
-    <script src="{% static 'note.js' %}"></script>
-    <title>Записки</title>
+
+    {% block header %}
+    {% endblock %}
+
+    <title>Notes</title>
+
   </head>
   <body>
+
   {% include 'navbar.html' %}
   {% block content %}
   {% endblock %}
+
   </body>
 </html>

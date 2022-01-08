@@ -1,4 +1,15 @@
 {% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <link rel="stylesheet" href="{% static 'note.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+    <script src="https://adrianotiger.github.io/web-esheep/dist/esheep.min.js"></script>
+    <script src="{% static 'note.js' %}"></script>
+{% endblock %}
+
 
 {%  block content %}
 
@@ -8,12 +19,18 @@
         </script>
 
         {% csrf_token%}
-        <button class="button" id="createsticky">Stick it!</button>
+        {% if user.is_authenticated %}
+                <button class="button" id="createsticky">Stick it!</button>
+        {% endif %}
+
         <div id="stickies-container">
                 {% for note in notes %}
                         {% if not only_user or user == note.author %}
                                 <div id={{ note.id }} class="drag sticky"
                                      style="left:{{ note.left }}; top:{{ note.top }}">
+
+                                        <div id={{ note.get_save_alert_id }} class="save_alert">
+                                        </div>
 
                                         <h3><input type="text" name="stickytitle"
                                                    id={{ note.get_title_id }} value={{ note.title }}></h3>
@@ -25,19 +42,28 @@
                                                 <span class="deletesticky">&times;</span>
                                         {% endif %}
 
-                                        <span class="savesticky">&#10003;</span>
+                                        {% if user.is_authenticated %}
+                                                <span class="savesticky">&#10003;</span>
+                                        {% endif %}
 
                                         {% if note.get_last_edit %}
                                         <a href="{% url 'notes:details_note' note.id %}" style="text-decoration:none;">
                                                 <div id={{ note.get_footer_id }}, class="update_footer">
-                                                        upd: {{ note.get_last_edit.when_published }} by
-                                                        {% if note.get_last_edit.author == user %} me
-                                                        {% else %} {{ note.get_last_edit.author }}
+                                                        {% if user == note.get_last_edit.author %}
+                                                        <span>upd: {{ note.get_last_edit.when_published }} by you</span>
+                                                        {% else %}
+                                                        <span>upd: {{ note.get_last_edit.when_published }} by {{ note.get_last_edit.author }}</span>
                                                         {% endif %}
                                                 </div>
                                         </a>
                                         {% endif %}
                                 </div>
+                        {% else %}
+
+                         <div id={{ note.id }} class="grass_border"
+                                    style="left:{{ note.left }}; top:{{ note.top }}">
+                         </div>
+
                         {% endif %}
                 {% endfor %}
         </div>

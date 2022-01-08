@@ -9,16 +9,22 @@ body {
   height: 100%;
   margin: 0;
   position: relative;
+  background-image: url("img/sky.jpg");
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
 
-button.button {
+button.button, button {
   -moz-user-select: none;
   -ms-user-select: none;
   -webkit-user-select: none;
-  background-color: #d4fc78;
+  color: #00243f;
+  background-color: rgb(255,215,100);
   border-radius: 0.25rem;
   border: 1px solid transparent;
-  color: #0065b3;
+  /*color: #0065b3;*/
   display: inline-block;
   font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
@@ -28,4 +34,23 @@ button.button {
   text-align: center;
   user-select: none;
   vertical-align: middle;
+  margin-top: 1rem;
 }
+
+button:hover {
+  border-color: green;
+  border-style: dashed;
+  border-width: 0.1rem;
+}
+
+.white_box {
+     background-color: rgba(255,255,255, 0.5);
+     display: inline-block;
+     margin: 2rem;
+     padding:1.5rem 1.5rem 2.5rem 1.5rem;
+     border-radius:20px;
+ }
+
+ a {
+    text-decoration: none;
+ }
