@@ -32,7 +32,6 @@ class Note(models.Model):
     def get_footer_id(self):
         return f'footer_{self.id}'
 
-
     def when_published(self):
         now = timezone.now()
         since = now - self.creation_date
@@ -40,10 +39,16 @@ class Note(models.Model):
         seconds = since.seconds
 
         if days == 0:
-            if seconds >= 3600:
-                return f"{int(seconds/3600)} hours ago"
+            if int(seconds / 3600) == 1:
+                return f"{int(seconds / 3600)} hour ago"
+            elif seconds >= 3600:
+                return f"{int(seconds / 3600)} hours ago"
+            elif int(seconds / 60) == 1:
+                return f"{int(seconds / 60)} minute ago"
             else:
                 return f"{int(seconds / 60)} minutes ago"
+        elif days == 1:
+            return f"{days} day ago"
         else:
             return f"{days} days ago"
 
@@ -102,10 +107,16 @@ class Edit(models.Model):
         seconds = since.seconds
 
         if days == 0:
-            if seconds >= 3600:
+            if int(seconds/3600) == 1:
+                return f"{int(seconds / 3600)} hour ago"
+            elif seconds >= 3600:
                 return f"{int(seconds/3600)} hours ago"
+            elif int(seconds / 60) == 1:
+                return f"{int(seconds / 60)} minute ago"
             else:
                 return f"{int(seconds / 60)} minutes ago"
+        elif days == 1:
+            return f"{days} day ago"
         else:
             return f"{days} days ago"
 
